@@ -1,0 +1,51 @@
+import java.io.IOException;
+import java.text.ParseException;
+
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.solab.iso8583.IsoMessage;
+import com.solab.iso8583.MessageFactory;
+import com.solab.iso8583.util.HexCodec;
+
+/** 
+ * @author XT Huang
+ * @date 2017年9月28日
+ *
+ * @Description:
+ *
+ */
+public class Test8583 {
+	
+		private static final Logger logger = LoggerFactory.getLogger(Test8583.class);
+		
+		private static MessageFactory<IsoMessage> config(String path){
+		    MessageFactory<IsoMessage> mfact = new MessageFactory<>();
+		    try {
+				mfact.setConfigPath(path);
+				mfact.setUseBinaryBitmap(true);
+				mfact.setCharacterEncoding("Cp1047");
+		        mfact.setForceStringEncoding(true);
+			} catch (IOException e) {
+				logger.error("msg configuration load fail", e);
+			}
+		    return mfact;
+		}
+	
+		@Test
+		public IsoMessage msgRead(){
+			
+			MessageFactory<IsoMessage> mfact = config("ppap.xml");
+			
+			byte[] trama = HexCodec.hexDecode("F0F8F0F0C2200000800000020400000500000000F0F5F1F4F3F8F1F0F4F0F7F0F6F0F3F4F2F3F2F7F7F7F2F0F6F0F1F4F3F8F1F0F0F9D4C3E2F0F1F1F9F7F6F0F6F1F0C9F040404040F0F0F0F0F0F0F0F0");
+			try {
+		        return mfact.parseMessage(trama, 0);
+			} catch (IOException e) {
+				logger.error("Header read fail", e);
+			} catch (ParseException pe){
+				logger.error("Header read fail", pe);
+			}
+			return new IsoMessage();
+		}
+}
