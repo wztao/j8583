@@ -42,13 +42,24 @@ public class Test8583 {
 		*/
 		private static final Logger logger = LoggerFactory.getLogger(Test8583.class);
 		
-		private static MessageFactory<IsoMessage> config(String path){
+		private MessageFactory<IsoMessage> configEBC(){
 		    MessageFactory<IsoMessage> mfact = new MessageFactory<>();
 		    try {
-				mfact.setConfigPath(path);
-				mfact.setUseBinaryBitmap(true);
-				mfact.setCharacterEncoding("Cp1047");
+			mfact.setConfigPath("ppap.xml");
+			mfact.setUseBinaryBitmap(true);
+			mfact.setCharacterEncoding("Cp1047");
 		        mfact.setForceStringEncoding(true);
+			} catch (IOException e) {
+				logger.error("msg configuration load fail", e);
+			}
+		    return mfact;
+		}
+		
+		private MessageFactory<IsoMessage> configASC(String path){
+		    MessageFactory<IsoMessage> mfact = new MessageFactory<>();
+		    try {
+			mfact.setConfigPath("ppap.xml");
+			mfact.setCharacterEncoding("UTF-8");
 			} catch (IOException e) {
 				logger.error("msg configuration load fail", e);
 			}
@@ -56,13 +67,26 @@ public class Test8583 {
 		}
 	
 		@Test
-		public IsoMessage msgRead(){
+		public IsoMessage msgRead1(){
 			
-			MessageFactory<IsoMessage> mfact = config("ppap.xml");
+			MessageFactory<IsoMessage> mfact = configEBC();
 			
 			byte[] trama = HexCodec.hexDecode("F0F8F0F0C2200000800000020400000500000000F0F5F1F4F3F8F1F0F4F0F7F0F6F0F3F4F2F3F2F7F7F7F2F0F6F0F1F4F3F8F1F0F0F9D4C3E2F0F1F1F9F7F6F0F6F1F0C9F040404040F0F0F0F0F0F0F0F0");
 			try {
 		        return mfact.parseMessage(trama, 0);
+			} catch (IOException e) {
+				logger.error("Header read fail", e);
+			} catch (ParseException pe){
+				logger.error("Header read fail", pe);
+			}
+			return new IsoMessage();
+		}
+		
+		@Test
+		public IsoMessage msgRead2(){
+			
+			MessageFactory<IsoMessage> mfact = configASC();
+		        return mfact.parseMessage("0210B23A80012EA08018000000001400000465000000000000300004281305474687711259460428042808115".getBytes(), 0);
 			} catch (IOException e) {
 				logger.error("Header read fail", e);
 			} catch (ParseException pe){
