@@ -5,9 +5,18 @@
 <!-- This is a test config file -->
 
 <!-- These are the ISO headers to be prepended to the message types specified -->
+<header type="0210">jiujiujiu</header
 <header type="0800">biubiubiu</header>
+	
+<template type="0210">
+	<field num="60" type="LLLVAR" />
+	<field num="70" type="ALPHA" length="3" />
+	<field num="90" type="ALPHA" length="42" />
+	<field num="100" type="LLVAR" />
+	<field num="102" type="LLVAR" />
+	<field num="126" type="LLLVAR" />
+</template>
 
-<!-- The client example uses this to create requests -->
 <parse type="0800">
     <field num="2" type="LLVAR" />
     <field num="7" type="DATE10" />
