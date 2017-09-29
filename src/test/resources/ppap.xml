@@ -5,7 +5,7 @@
 <!-- This is a test config file -->
 
 <!-- These are the ISO headers to be prepended to the message types specified -->
-<header type="0210">jiujiujiu</header
+<header type="0210">jiujiujiu</header>
 <header type="0800">biubiubiu</header>
 	
 <template type="0210">
